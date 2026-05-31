@@ -636,8 +636,11 @@
 
     .scroll-hint {
       position: absolute;
-      bottom: 36px; left: 50%;
-      transform: translateX(-50%);
+      bottom: 36px; left: 0; right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: none;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -692,9 +695,15 @@ filter: none;
       transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.4,0,0.2,1);
       z-index: 1;
     }
-.hero-img-frame:hover {
-      transform: translateY(-6px);
-      filter: none;
+.hero-img-frame:hover,
+.hero-img-frame.glowing {
+  transform: translateY(-6px);
+  filter: none;
+  box-shadow:
+    0 0 30px rgba(245, 158, 11, 0.20),
+    0 0 70px rgba(245, 158, 11, 0.08),
+    0 0 120px rgba(255, 107, 53, 0.04);
+}
     }
     .hero-img-frame .hero-img-wrap:hover {
       transform: none;
@@ -3976,6 +3985,19 @@ document.querySelectorAll('.cert-img-wrap').forEach(function(wrap) {
 
 /* Expose globally for dynamically added cards */
 window.openLightbox = openLightbox;
+
+/* ── Hero image glow on touch ── */
+(function() {
+  var frame = document.querySelector('.hero-img-frame');
+  if (!frame) return;
+  frame.addEventListener('touchstart', function() {
+    frame.classList.add('glowing');
+  }, { passive: true });
+  frame.addEventListener('touchend', function() {
+    setTimeout(function() { frame.classList.remove('glowing'); }, 600);
+  }, { passive: true });
+})();
+
 </script>
 
   
