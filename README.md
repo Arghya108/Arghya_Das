@@ -1,4 +1,5 @@
-<img width="1901" height="872" alt="image" src="https://github.com/user-attachments/assets/34c3d85a-8fac-4945-a504-a24f9d8186ca" />
+<img width="1894" height="871" alt="image" src="https://github.com/user-attachments/assets/eb5e7457-5507-494b-8c68-428aff3844fc" />
+
 
 
 # Arghya Das — Developer Portfolio
@@ -49,13 +50,14 @@ I’m a Computer Science student passionate about software engineering, modern w
 
 HOME PAGE: 🦉 DARK MODE
 
-<img width="1901" height="872" alt="image" src="https://github.com/user-attachments/assets/f61f7295-8e64-4d72-8f0f-92a35fbba614" />
+<img width="1894" height="871" alt="image" src="https://github.com/user-attachments/assets/37728a2e-15db-4f98-a442-7a51cd9b4478" />
+
 
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
 HOME PAGE: 🌞 LIGHT MODE
 
-<img width="1898" height="875" alt="image" src="https://github.com/user-attachments/assets/3ea3e684-3b1e-4dd2-b356-fea0680567ac" />
+<img width="1898" height="876" alt="image" src="https://github.com/user-attachments/assets/fed2b75a-0168-49c1-b755-27c0144b2045" />
 
 
