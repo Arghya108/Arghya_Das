@@ -22,11 +22,9 @@ LINK: https://arghya108.github.io/Arghya_Das/
 
 ## 🛠 Tech Stack
 
-- HTML5
-- CSS3
-- JavaScript
-- Responsive Design
-- UI/UX Principles
+- AI / ML
+- Web Dev
+- API
 
 ## 🚀 Goals of This Portfolio
 
@@ -45,7 +43,7 @@ LINK: https://arghya108.github.io/Arghya_Das/
 
 ## 👨‍💻 About Me
 
-I’m a Computer Science student passionate about software engineering, modern web development, and building impactful digital experiences. I enjoy learning new technologies, solving problems, and creating projects that combine both functionality and design.
+I am passionate about building real things — from Python tools to a full website. Obsessed with AI, automation, and building something that actually works. 
 
 ⭐ If you like this project, feel free to star the repository.
 
