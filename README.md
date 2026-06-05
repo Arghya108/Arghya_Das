@@ -34,8 +34,6 @@ LINK: https://arghya108.github.io/Arghya_Das/
 
 ## 📌 Future Improvements
 
-- Full-stack project integration
-- Backend APIs
 - Blog/technical writing section
 - Performance optimization
 - Advanced animations
