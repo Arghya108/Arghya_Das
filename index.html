@@ -26,7 +26,6 @@
       --border-2:    rgba(255,255,255,0.11);
       --accent:      #F59E0B;
       --accent-2:    #ff6b35;
-      --accent-3:    #06B6D4;
       --success:     #22C55E;
       --accent-glow: rgba(245,158,11,0.16);
 --text:        #ffffff;
@@ -34,7 +33,6 @@
       --text-3:      #64748b;
       --radius:      12px;
       --radius-lg:   22px;
-      --shadow:      0 8px 40px rgba(0,0,0,0.6);
       --transition:  0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --font-display: 'Playfair Display', serif;
     }
@@ -50,7 +48,6 @@
       --text:        #000000;
       --text-2:      #1a202c;
       --text-3:      #4a5568;
-      --shadow:      0 8px 32px rgba(0,0,0,0.10);
       --accent-glow: rgba(245,158,11,0.10);
     }
 
@@ -646,10 +643,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transform: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 8px;
       color: var(--text-3);
       font-size: 0.75rem;
@@ -710,7 +703,6 @@ filter: none;
     0 0 70px rgba(245, 158, 11, 0.08),
     0 0 120px rgba(255, 107, 53, 0.04);
 }
-    }
     .hero-img-frame .hero-img-wrap:hover {
       transform: none;
       box-shadow: 0 20px 48px rgba(0,0,0,0.45);
@@ -1619,21 +1611,6 @@ filter: none;
     }
 
     /* ══════════════════════════════════════
-       SECTION DIVIDER — DIAGONAL
-    ══════════════════════════════════════ */
-    .section-divider {
-      height: 80px;
-      background: var(--bg-2);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 40%);
-      margin-bottom: -2px;
-      position: relative;
-      z-index: 1;
-    }
-    .section-divider.flip {
-      clip-path: polygon(0 0, 100% 60%, 100% 100%, 0 100%);
-    }
-
-    /* ══════════════════════════════════════
        PROJECT CARDS — ENHANCED
     ══════════════════════════════════════ */
     .project-card {
@@ -1900,13 +1877,6 @@ filter: none;
       font-style: italic;
     }
 
-    /* ══════════════════════════════════════
-       CARD HOVER — shimmer effect
-    ══════════════════════════════════════ */
-    @keyframes shimmer {
-      0%   { transform: translateX(-100%) skewX(-15deg); }
-      100% { transform: translateX(200%) skewX(-15deg); }
-    }
     .project-card:hover::before,
     .toolkit-card:hover::before { transform: scaleX(1); }
 
@@ -2265,6 +2235,93 @@ filter: none;
 [data-theme="light"] .project-num { color: rgba(0,0,0,0.35); }
 
 [data-theme="dark"] .project-num { color: rgba(255,255,255,0.25); }
+
+    /* ══════════════════════════════════════
+       INTRO VIDEO — PLAY BUTTON ON PHOTO
+    ══════════════════════════════════════ */
+    .video-play-btn {
+      position: absolute;
+      top: 5%; left: 5%;
+      
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: rgba(245,158,11,0.92);
+      border: 3px solid rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 0 rgba(245,158,11,0.5);
+      animation: videoBtnPulse 2.4s ease-in-out infinite;
+    }
+    .video-play-btn:hover {
+      transform: scale(1.1);
+      background: var(--accent);
+    }
+    .video-play-btn svg {
+      width: 24px; height: 24px;
+      fill: #000;
+      margin-left: 3px;
+    }
+    @keyframes videoBtnPulse {
+      0%, 100% { box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 0 rgba(245,158,11,0.45); }
+      50%       { box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 14px rgba(245,158,11,0); }
+    }
+
+    /* ══════════════════════════════════════
+       INTRO VIDEO — MODAL
+    ══════════════════════════════════════ */
+    #video-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      padding: 20px;
+    }
+    #video-modal.open { display: flex; }
+    .video-modal-box {
+      width: 100%;
+      max-width: 800px;
+      position: relative;
+    }
+    .video-modal-box .video-ratio {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+    }
+    .video-modal-box iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    #video-modal-close {
+      position: absolute;
+      top: -48px; right: 0;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    #video-modal-close:hover {
+      background: var(--accent);
+      color: #000;
+      transform: scale(1.1);
+    }
     
   </style>
 </head>
@@ -2429,6 +2486,9 @@ filter: none;
           <div class="hero-img-dots br"></div>
           <img class="hero-img" id="hero-photo" src="" alt="Arghya Das"
             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22340%22 height=%22450%22%3E%3Crect width=%22340%22 height=%22450%22 fill=%22%23141c25%22/%3E%3Ccircle cx=%22170%22 cy=%22160%22 r=%2280%22 fill=%22%231a2434%22/%3E%3Cellipse cx=%22170%22 cy=%22370%22 rx=%22130%22 ry=%22100%22 fill=%22%231a2434%22/%3E%3Ctext x=%22170%22 y=%22165%22 text-anchor=%22middle%22 font-size=%2270%22%3E%F0%9F%91%A4%3C/text%3E%3Ctext x=%22170%22 y=%22290%22 text-anchor=%22middle%22 font-family=%22Syne,sans-serif%22 font-size=%2213%22 fill=%22%238896a8%22%3EClick Change Photo%3C/text%3E%3C/svg%3E'" />
+          <button class="video-play-btn" onclick="openVideoModal()" aria-label="Play intro video" title="Watch My Intro">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
           <div class="hero-img-badge">
             <div class="avail-ring" style="width:8px;height:8px;"><div class="dot-inner" style="width:8px;height:8px;"></div></div>
             Open to work
@@ -3270,7 +3330,7 @@ filter: none;
   ══════════════════════════════════════════════════════ -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
 
   <!-- ══════════════════════════════════════════════════════
        FIREBASE CONFIG — Replace with your own project values
@@ -3291,7 +3351,6 @@ filter: none;
       firebase.initializeApp(FIREBASE_CONFIG);
     }
     const db      = firebase.firestore();
-    const storage = firebase.storage();
 
     /* ── Firestore helpers ── */
     const DOC_TEXT  = () => db.collection('portfolio').doc('text_v1');
@@ -3301,7 +3360,6 @@ filter: none;
     /* Expose for the admin system below */
     window._firebaseReady = true;
     window._db      = db;
-    window._storage = storage;
     window._DOC_TEXT  = DOC_TEXT;
     window._DOC_META  = DOC_META;
     window._DOC_PHOTO = DOC_PHOTO;
@@ -3909,6 +3967,57 @@ filter: none;
 
   })();
   </script>
+<!-- INTRO VIDEO MODAL -->
+<div id="video-modal">
+  <div class="video-modal-box">
+    <button id="video-modal-close" onclick="closeVideoModal()">✕</button>
+    <div class="video-ratio">
+      <iframe id="video-modal-iframe"
+        src=""
+        title="Intro video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ══════════════════════════════════════
+     INTRO VIDEO MODAL — open / close
+  ══════════════════════════════════════ */
+  var YOUTUBE_VIDEO_ID = 'hV0I5znFdd4'; /* 🔴 PUT YOUR YOUTUBE VIDEO ID HERE */
+
+  function openVideoModal() {
+    var iframe = document.getElementById('video-modal-iframe');
+    iframe.src = 'https://www.youtube.com/embed/' + YOUTUBE_VIDEO_ID + '?autoplay=1&rel=0';
+    document.getElementById('video-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+function closeVideoModal() {
+    document.getElementById('video-modal').classList.remove('open');
+    document.getElementById('video-modal-iframe').src = ''; /* stop video */
+    /* Only restore scroll if lightbox is also closed */
+    if (!document.getElementById('cert-lightbox').classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  /* close on backdrop click */
+  document.getElementById('video-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeVideoModal();
+  });
+
+  /* close on ESC key — handles all modals */
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('cert-lightbox').classList.contains('open')) { closeLightbox(); return; }
+    if (document.getElementById('video-modal').classList.contains('open'))   { closeVideoModal(); return; }
+  });
+</script>
+
 <!-- CERTIFICATE LIGHTBOX -->
 <div id="cert-lightbox">
   <button id="cert-lightbox-close" onclick="closeLightbox()">✕</button>
@@ -3941,7 +4050,10 @@ function openLightbox(src) {
 
 function closeLightbox() {
   document.getElementById('cert-lightbox').classList.remove('open');
-  document.body.style.overflow = '';
+  /* Only restore scroll if video modal is also closed */
+  if (!document.getElementById('video-modal').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
   lbScale = 1;
 }
 
@@ -3977,11 +4089,6 @@ document.getElementById('cert-lightbox').addEventListener('wheel', function(e) {
 /* Click backdrop to close */
 document.getElementById('cert-lightbox').addEventListener('click', function(e) {
   if (e.target === this) closeLightbox();
-});
-
-/* ESC key to close */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeLightbox();
 });
 
 /* Attach click to existing cert cards */
