@@ -1,4 +1,5 @@
-<img width="1898" height="875" alt="image" src="https://github.com/user-attachments/assets/da851d9d-b917-458b-a177-11b5089d7570" />
+<img width="1875" height="872" alt="image" src="https://github.com/user-attachments/assets/82ec3909-8bf1-49cc-8fdf-189744916dbe" />
+
 
 
 # Arghya Das — Developer Portfolio
@@ -47,14 +48,16 @@ I am passionate about building real things — from Python tools to a full websi
 
 HOME PAGE: 🦉 DARK MODE
 
-<img width="1898" height="875" alt="image" src="https://github.com/user-attachments/assets/8d7733d9-2b4e-43ed-9c58-269d22aa3c07" />
+<img width="1875" height="872" alt="image" src="https://github.com/user-attachments/assets/a17dd93b-3b63-4e3e-8ff1-6b1f97349653" />
+
 
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
 HOME PAGE: 🌞 LIGHT MODE
 
-<img width="1898" height="872" alt="image" src="https://github.com/user-attachments/assets/6e12eaf3-5404-408a-82dc-a2635ef72fc3" />
+<img width="1901" height="875" alt="image" src="https://github.com/user-attachments/assets/aee7ec7a-c20b-4343-b4cc-aa1a3bbf7352" />
+
 
 
 
