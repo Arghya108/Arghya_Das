@@ -1,4 +1,5 @@
-<img width="1875" height="872" alt="image" src="https://github.com/user-attachments/assets/82ec3909-8bf1-49cc-8fdf-189744916dbe" />
+<img width="1898" height="875" alt="image" src="https://github.com/user-attachments/assets/7000e1b9-cccb-494a-9990-9396be36c0ff" />
+
 
 
 
@@ -48,7 +49,7 @@ I am passionate about building real things — from Python tools to a full websi
 
 HOME PAGE: 🦉 DARK MODE
 
-<img width="1875" height="872" alt="image" src="https://github.com/user-attachments/assets/a17dd93b-3b63-4e3e-8ff1-6b1f97349653" />
+<img width="1898" height="875" alt="image" src="https://github.com/user-attachments/assets/dc7d30f5-2f34-4f72-b963-9ab364aa3d3b" />
 
 
 
@@ -56,7 +57,8 @@ HOME PAGE: 🦉 DARK MODE
 
 HOME PAGE: 🌞 LIGHT MODE
 
-<img width="1901" height="875" alt="image" src="https://github.com/user-attachments/assets/aee7ec7a-c20b-4343-b4cc-aa1a3bbf7352" />
+<img width="1902" height="876" alt="image" src="https://github.com/user-attachments/assets/deabad3d-d996-4ef0-ba0e-4215664841a9" />
+
 
 
 
