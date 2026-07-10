@@ -902,6 +902,78 @@ filter: none;
   .about-stat-num { font-size: 2.2rem; }
 }
     /* ══════════════════════════════════════
+       RESUME / CV SECTION
+    ══════════════════════════════════════ */
+    #resume-cv { background: var(--bg-2); }
+
+    .resume-cv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .resume-cv-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .resume-cv-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .resume-cv-card:hover {
+      border-color: var(--border-2);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.4);
+    }
+    .resume-cv-card:hover::before { transform: scaleX(1); }
+
+    .resume-cv-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(245,158,11,0.22);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+    }
+    .resume-cv-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .resume-cv-desc {
+      font-size: 0.92rem;
+      color: var(--text-2);
+      line-height: 1.7;
+      font-weight: 300;
+      flex: 1;
+    }
+    .resume-cv-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 700px) {
+      .resume-cv-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════
        PROJECTS — SECTION WRAPPER
     ══════════════════════════════════════ */
     #projects { background: var(--bg); }
@@ -2420,6 +2492,7 @@ filter: none;
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#certificates">Certificates</a></li>
+      <li><a href="#resume-cv">Resume/CV</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-right">
@@ -2438,6 +2511,7 @@ filter: none;
     <a href="#projects"     onclick="closeMobile()">Projects</a>
     <a href="#skills"       onclick="closeMobile()">Skills</a>
     <a href="#certificates" onclick="closeMobile()">Certificates</a>
+    <a href="#resume-cv"    onclick="closeMobile()">Resume/CV</a>
     <a href="#contact"      onclick="closeMobile()">Contact</a>
     <a href="#contact" class="btn-hire" style="display:inline-flex;width:fit-content;" onclick="closeMobile()">Hire Me</a>
   </div>
@@ -2860,6 +2934,40 @@ filter: none;
       <button class="carousel-btn" id="certs-prev" aria-label="Previous certificate">&#8592;</button>
       <div class="carousel-dots" id="certs-dots"></div>
       <button class="carousel-btn" id="certs-next" aria-label="Next certificate">&#8594;</button>
+    </div>
+  </section>
+
+  <!-- ══ RESUME / CV ══ -->
+  <section id="resume-cv" class="section">
+    <div class="certs-section-header reveal">
+      <div class="certs-eyebrow">
+        <div class="certs-eyebrow-line"></div>
+        <span class="certs-eyebrow-text">Resume &amp; CV</span>
+      </div>
+      <h2 class="certs-main-title">Get My <em>Documents</em></h2>
+      <p class="section-subtitle" style="margin-top:14px;">Quick one-pager for recruiters, or the full detailed history — take your pick.</p>
+    </div>
+
+    <div class="resume-cv-grid">
+      <div class="resume-cv-card reveal">
+        <div class="resume-cv-icon">📄</div>
+        <h3 class="resume-cv-title">Resume</h3>
+        <p class="resume-cv-desc">A concise, one-page snapshot of my skills and experience — built for quick screening.</p>
+        <div class="resume-cv-actions">
+          <a href="Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">View →</a>
+          <a href="Resume.pdf" download class="btn btn-primary">Download ↓</a>
+        </div>
+      </div>
+
+      <div class="resume-cv-card reveal delay-1">
+        <div class="resume-cv-icon">📋</div>
+        <h3 class="resume-cv-title">CV</h3>
+        <p class="resume-cv-desc">The full story — detailed history of my projects, education, and certifications.</p>
+        <div class="resume-cv-actions">
+          <a href="CV.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">View →</a>
+          <a href="CV.pdf" download class="btn btn-primary">Download ↓</a>
+        </div>
+      </div>
     </div>
   </section>
 
