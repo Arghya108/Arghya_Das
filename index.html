@@ -18,12 +18,12 @@
     ══════════════════════════════════════ */
     :root {
 --bg:          #030609;
---bg-2:        #060c12;
---bg-3:        #0a1119;
---surface:     #0d1520;
---surface-2:   #132030;
-      --border:      rgba(255,255,255,0.065);
-      --border-2:    rgba(255,255,255,0.11);
+--bg-2:        #070d14;
+--bg-3:        #0c141d;
+--surface:     #131e2c;
+--surface-2:   #1a2a3d;
+      --border:      rgba(255,255,255,0.11);
+      --border-2:    rgba(255,255,255,0.18);
       --accent:      #F59E0B;
       --accent-2:    #ff6b35;
       --success:     #22C55E;
@@ -852,7 +852,7 @@ filter: none;
 }
 
 .about-stat-card {
-  background: var(--surface);
+  background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
   border-radius: var(--radius-lg);
   padding: 32px 28px;
   display: flex;
@@ -914,7 +914,7 @@ filter: none;
     }
 
     .resume-cv-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 36px 32px;
@@ -989,7 +989,7 @@ filter: none;
 
     /* ── PROJECT CARD BASE STYLES (shared with carousel) ── */
     .project-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 32px;
@@ -1092,9 +1092,10 @@ filter: none;
     .carousel-fade {
       position: absolute;
       top: 0; bottom: 0;
-      width: 72px;
+      width: 56px;
       pointer-events: none;
       z-index: 2;
+      opacity: 0.55;
       transition: opacity 0.35s ease;
     }
     .carousel-fade--left {
@@ -1217,7 +1218,7 @@ filter: none;
     .toolkit-grid.is-dragging .toolkit-card { transform: none !important; box-shadow: none !important; }
 
     .toolkit-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 28px 22px;
@@ -1308,7 +1309,7 @@ filter: none;
 
     /* Certificate card — image-forward, matching demo design */
     .cert-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: 18px;
       overflow: hidden;
@@ -1686,7 +1687,7 @@ filter: none;
        PROJECT CARDS — ENHANCED
     ══════════════════════════════════════ */
     .project-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 32px;
@@ -1763,7 +1764,7 @@ filter: none;
        CERTIFICATES — ENHANCED GLOW CARD
     ══════════════════════════════════════ */
     .cert-card {
-      background: var(--surface);
+      background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 45%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
