@@ -2025,14 +2025,15 @@ filter: none;
     .admin-modal-icon { font-size: 2.5rem; margin-bottom: 16px; }
     .admin-modal-box h3 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; margin-bottom:8px; }
     .admin-modal-box p { font-size:0.85rem; color:var(--text-2); margin-bottom:28px; }
-    #admin-pw-input {
+    #admin-pw-input, #admin-email-input {
       width:100%; background:var(--bg); border:1px solid var(--border-2);
       border-radius:10px; padding:13px 18px; color:var(--text);
       font-family:'DM Sans',sans-serif; font-size:0.95rem;
-      text-align:center; letter-spacing:0.15em;
-      margin-bottom:14px; outline:none; transition:border-color 0.2s;
+      text-align:center; letter-spacing:0.03em;
+      margin-bottom:12px; outline:none; transition:border-color 0.2s;
     }
-    #admin-pw-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(245,158,11,0.12); }
+    #admin-pw-input { letter-spacing:0.15em; }
+    #admin-pw-input:focus, #admin-email-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(245,158,11,0.12); }
     #admin-pw-error { color:#ff5252; font-size:0.78rem; margin-bottom:14px; display:none; }
     .admin-modal-btns { display:flex; gap:12px; justify-content:center; margin-top:4px; }
     #admin-toast {
@@ -2411,13 +2412,15 @@ filter: none;
     <div class="admin-modal-box">
       <div class="admin-modal-icon">🔑</div>
       <h3>Admin Access</h3>
-      <p>Enter your password to enable edit mode</p>
-      <input type="password" id="admin-pw-input" placeholder="Password"
+      <p>Sign in to enable edit mode</p>
+      <input type="email" id="admin-email-input" placeholder="Email" autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('admin-pw-input').focus()"/>
+      <input type="password" id="admin-pw-input" placeholder="Password" autocomplete="current-password"
              onkeydown="if(event.key==='Enter')adminCheckPw()"/>
-      <div id="admin-pw-error">Wrong password. Try again.</div>
+      <div id="admin-pw-error">Invalid email or password.</div>
       <div class="admin-modal-btns">
         <button class="btn btn-ghost" style="padding:9px 20px;font-size:0.82rem" onclick="adminCloseModal()">Cancel</button>
-        <button class="btn btn-primary" style="padding:9px 22px;font-size:0.82rem" onclick="adminCheckPw()">Unlock ✓</button>
+        <button class="btn btn-primary" style="padding:9px 22px;font-size:0.82rem" onclick="adminCheckPw()" id="admin-unlock-btn">Unlock ✓</button>
       </div>
     </div>
   </div>
@@ -3439,6 +3442,7 @@ filter: none;
   ══════════════════════════════════════════════════════ -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 
   <!-- ══════════════════════════════════════════════════════
@@ -3460,6 +3464,11 @@ filter: none;
       firebase.initializeApp(FIREBASE_CONFIG);
     }
     const db      = firebase.firestore();
+    const auth    = firebase.auth();
+    /* Keep the admin logged in across page reloads on this browser only */
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(err) {
+      console.warn('Auth persistence error:', err);
+    });
 
     /* ── Firestore helpers ── */
     const DOC_TEXT  = () => db.collection('portfolio').doc('text_v1');
@@ -3469,6 +3478,7 @@ filter: none;
     /* Expose for the admin system below */
     window._firebaseReady = true;
     window._db      = db;
+    window._auth    = auth;
     window._DOC_TEXT  = DOC_TEXT;
     window._DOC_META  = DOC_META;
     window._DOC_PHOTO = DOC_PHOTO;
@@ -3481,11 +3491,11 @@ filter: none;
   <script>
   (function() {
     /* ── CONFIG ── */
-    var ADMIN_PASSWORD = 'aranya108';
     var adminMode = false;
     var editModalType = null;
     var cfImageData = null;
     var cfImageFile = null;   /* raw File object for Storage upload */
+    var authBusy = false;
 
     /* ── TOAST ── */
     window.adminToast = function(msg, dur) {
@@ -3494,42 +3504,84 @@ filter: none;
       setTimeout(function() { t.classList.remove('show'); }, dur || 2200);
     };
 
-    /* ── PASSWORD MODAL ── */
+    /* ── AUTO-RESTORE ADMIN STATE ── */
+    /* If the admin is still signed in from a previous visit (persisted locally
+       in this browser only), re-enable edit mode automatically on reload.
+       Everyone else simply has no session, so nothing changes for visitors. */
+    if (window._auth) {
+      window._auth.onAuthStateChanged(function(user) {
+        if (user && !adminMode) {
+          adminMode = true;
+          document.body.classList.add('admin-mode');
+          enableEditing();
+        } else if (!user && adminMode) {
+          adminMode = false;
+          document.body.classList.remove('admin-mode');
+          disableEditing();
+        }
+      });
+    }
+
+    /* ── LOGIN MODAL ── */
     window.adminToggle = function() {
       if (adminMode) { exitAdmin(); return; }
       var m = document.getElementById('admin-modal');
+      document.getElementById('admin-email-input').value = '';
       document.getElementById('admin-pw-input').value = '';
       document.getElementById('admin-pw-error').style.display = 'none';
       m.classList.add('open');
-      setTimeout(function() { document.getElementById('admin-pw-input').focus(); }, 120);
+      setTimeout(function() { document.getElementById('admin-email-input').focus(); }, 120);
     };
     window.adminCloseModal = function() {
       document.getElementById('admin-modal').classList.remove('open');
     };
     window.adminCheckPw = function() {
-      var val = document.getElementById('admin-pw-input').value;
-      if (val === ADMIN_PASSWORD) {
-        adminMode = true;
-        document.body.classList.add('admin-mode');
-        adminCloseModal();
-        enableEditing();
-        adminToast('🔑 Edit mode ON — click text to edit, use + to add, 🗑 to delete');
-      } else {
-        document.getElementById('admin-pw-error').style.display = 'block';
-        document.getElementById('admin-pw-input').value = '';
-        document.getElementById('admin-pw-input').focus();
+      if (authBusy || !window._auth) return;
+      var email = document.getElementById('admin-email-input').value.trim();
+      var pass  = document.getElementById('admin-pw-input').value;
+      var errEl = document.getElementById('admin-pw-error');
+      var btn   = document.getElementById('admin-unlock-btn');
+      errEl.style.display = 'none';
+      if (!email || !pass) {
+        errEl.textContent = 'Enter both email and password.';
+        errEl.style.display = 'block';
+        return;
       }
+      authBusy = true;
+      btn.textContent = 'Checking…'; btn.disabled = true;
+      window._auth.signInWithEmailAndPassword(email, pass)
+        .then(function() {
+          adminMode = true;
+          document.body.classList.add('admin-mode');
+          adminCloseModal();
+          enableEditing();
+          adminToast('🔑 Edit mode ON — click text to edit, use + to add, 🗑 to delete');
+          authBusy = false;
+          btn.textContent = 'Unlock ✓'; btn.disabled = false;
+        })
+        .catch(function(err) {
+          console.warn('Admin auth error:', err.code);
+          errEl.textContent = 'Invalid email or password.';
+          errEl.style.display = 'block';
+          document.getElementById('admin-pw-input').value = '';
+          document.getElementById('admin-pw-input').focus();
+          authBusy = false;
+          btn.textContent = 'Unlock ✓'; btn.disabled = false;
+        });
     };
     document.getElementById('admin-pw-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') adminCheckPw();
     });
 
     function exitAdmin() {
+      /* Save WHILE still authenticated — Firestore rules require a signed-in
+         user to write, so this must happen before signOut(), not after. */
+      savePortfolioState();
       adminMode = false;
       document.body.classList.remove('admin-mode');
       disableEditing();
-      savePortfolioState();
       adminToast('Edit mode OFF — saving to Firebase…');
+      if (window._auth) window._auth.signOut();
     }
 
     /* ── INLINE TEXT EDITING ── */
