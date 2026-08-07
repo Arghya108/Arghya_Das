@@ -43,13 +43,103 @@
       --bg-3:        #ffffff;
       --surface:     #ffffff;
       --surface-2:   #f7f8fa;
-      --border:      rgba(0,0,0,0.07);
-      --border-2:    rgba(0,0,0,0.13);
+      --border:      rgba(0,0,0,0.10);
+      --border-2:    rgba(0,0,0,0.18);
       --text:        #000000;
       --text-2:      #1a202c;
       --text-3:      #4a5568;
-      --accent-glow: rgba(245,158,11,0.10);
+      --accent-glow: rgba(245,158,11,0.14);
     }
+
+    /* Light-mode overrides for elements that hardcode dark rgba() colors */
+    [data-theme="light"] nav {
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    [data-theme="light"] body::before { opacity: 0.15; }
+    [data-theme="light"] #particle-network { opacity: 0.18; }
+    [data-theme="light"] .hero-tech-float {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(0,0,0,0.10);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+    [data-theme="light"] .hero-img-badge {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(0,0,0,0.12);
+      color: #1a202c;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    [data-theme="light"] .hero-img-wrap::after {
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.35) 100%);
+    }
+    [data-theme="light"] .cert-img-placeholder {
+      background: linear-gradient(135deg, #eef1f7 0%, #e2e6ee 100%);
+    }
+    [data-theme="light"] .cert-img-placeholder-label { color: #64748b; }
+    [data-theme="light"] .stat::before,
+    [data-theme="light"] .project-card::before,
+    [data-theme="light"] .toolkit-card::before,
+    [data-theme="light"] .resume-cv-card::before,
+    [data-theme="light"] .about-stat-card::after { opacity: 1; }
+    [data-theme="light"] .project-card,
+    [data-theme="light"] .toolkit-card,
+    [data-theme="light"] .cert-card,
+    [data-theme="light"] .resume-cv-card,
+    [data-theme="light"] .about-stat-card,
+    [data-theme="light"] .contact-item,
+    [data-theme="light"] .contact-form {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    [data-theme="light"] .project-card:hover,
+    [data-theme="light"] .toolkit-card:hover,
+    [data-theme="light"] .cert-card:hover,
+    [data-theme="light"] .resume-cv-card:hover,
+    [data-theme="light"] .about-stat-card:hover {
+      box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+    }
+    [data-theme="light"] .stack-pill,
+    [data-theme="light"] .skill-pill,
+    [data-theme="light"] .chip,
+    [data-theme="light"] .cert-date-pill,
+    [data-theme="light"] .cert-date-row {
+      background: #f1f3f7;
+      border-color: rgba(0,0,0,0.12);
+    }
+    [data-theme="light"] .form-group input,
+    [data-theme="light"] .form-group textarea {
+      background: #ffffff;
+      border-color: rgba(0,0,0,0.16);
+      color: #000000;
+    }
+    [data-theme="light"] .form-group input::placeholder,
+    [data-theme="light"] .form-group textarea::placeholder { color: #94a3b8; }
+    [data-theme="light"] .theme-toggle { background: #e2e6ee; }
+    [data-theme="light"] .mobile-menu {
+      background: #ffffff;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    }
+    [data-theme="light"] .video-modal-box iframe,
+    [data-theme="light"] #video-modal,
+    [data-theme="light"] #cert-lightbox { background: rgba(0,0,0,0.85); }
+    [data-theme="light"] .admin-modal-box,
+    [data-theme="light"] .edit-modal-box {
+      box-shadow: 0 30px 70px rgba(0,0,0,0.20);
+    }
+    [data-theme="light"] .admin-form-group input,
+    [data-theme="light"] .admin-form-group textarea,
+    [data-theme="light"] .admin-form-group select,
+    [data-theme="light"] #admin-pw-input,
+    [data-theme="light"] #admin-email-input {
+      background: #ffffff;
+      color: #000000;
+      border-color: rgba(0,0,0,0.16);
+    }
+    [data-theme="light"] .img-drop-zone { background: #f8f9fb; }
+    [data-theme="light"] .social-icon-btn,
+    [data-theme="light"] .carousel-btn { background: #ffffff; }
+    [data-theme="light"] footer { border-top: 1px solid rgba(0,0,0,0.08); }
+    [data-theme="light"] .footer-divider { background: rgba(0,0,0,0.08); }
 
  [data-theme="light"] .hero-img-badge {
       background: rgba(255,255,255,0.90);
@@ -1062,7 +1152,7 @@ filter: none;
       display: flex;
       gap: 24px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       padding: 16px 36px 32px 36px;
@@ -1203,7 +1293,7 @@ filter: none;
       display: flex;
       gap: 24px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       padding: 16px 36px 32px 36px;
@@ -1480,7 +1570,7 @@ filter: none;
       display: flex;
       gap: 24px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       padding: 16px 36px 32px 36px;
@@ -2396,7 +2486,114 @@ filter: none;
       color: #000;
       transform: scale(1.1);
     }
-    
+
+    /* ══════════════════════════════════════════════════════
+       MOBILE OPTIMIZATION — one place, all phone fixes
+    ══════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .section { padding: 64px 6%; }
+      nav { padding: 14px 5%; }
+      .nav-logo { font-size: 1rem; }
+      .section-tag { font-size: 0.7rem; padding: 4px 12px; }
+      .section-title, .certs-main-title, .toolkit-heading { font-size: clamp(1.7rem, 8vw, 2.4rem); }
+      .section-subtitle { font-size: 0.92rem; }
+
+      /* Hero */
+      #hero { padding: 100px 6% 60px; min-height: auto; }
+      .hero-name { font-size: clamp(2.4rem, 11vw, 3.4rem); }
+      .hero-tagline { font-size: 1rem; }
+      .hero-desc { font-size: 0.92rem; max-width: 100%; }
+      .hero-badge { font-size: 0.74rem; padding: 6px 14px 6px 8px; }
+      .hero-actions { width: 100%; }
+      .hero-actions .btn { flex: 1; justify-content: center; padding: 12px 16px; font-size: 0.85rem; }
+      .hero-stats { gap: 22px; margin-top: 34px; flex-wrap: wrap; justify-content: center; }
+      .stat-num { font-size: 1.5rem; }
+      .stat-label { font-size: 0.68rem; }
+      .hero-img-wrap { width: 220px; height: 290px; }
+      .hero-tech-float { padding: 10px 12px; gap: 9px; }
+      .hero-tech-float-icon { width: 32px; height: 32px; font-size: 1rem; }
+      .hero-tech-float-tags span { font-size: 0.63rem; padding: 3px 8px; }
+      .video-play-btn { width: 40px; height: 40px; }
+      .video-play-btn svg { width: 18px; height: 18px; }
+
+      /* Marquee */
+      .marquee-item { padding: 0 20px; font-size: 0.68rem; }
+
+      /* About */
+      .about-new-grid { gap: 32px; }
+      .about-new-text p { font-size: 0.9rem; }
+      .about-stat-card { padding: 22px 18px; }
+      .about-stat-num { font-size: 2.1rem; }
+      .certs-main-title { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+
+      /* Projects / carousel cards */
+      .carousel-track .project-card { min-width: 260px; max-width: 260px; padding: 24px 20px; }
+      .toolkit-grid .toolkit-card { min-width: 250px; max-width: 250px; min-height: 320px; padding: 22px 18px; }
+      .project-title { font-size: 1.05rem; }
+      .project-desc { font-size: 0.85rem; }
+      .project-num { font-size: 2.6rem; }
+      .carousel-track, .toolkit-grid, #certs-track { padding: 12px 16px 24px 16px; gap: 16px; }
+      .carousel-controls { gap: 12px; }
+      .carousel-btn { width: 38px; height: 38px; font-size: 1rem; }
+      .carousel-fade { width: 30px; }
+
+      /* Certificates */
+      .cert-card { min-width: 250px; max-width: 250px; }
+      .cert-img-wrap { height: 160px; }
+      .cert-title { font-size: 0.92rem; }
+      .certs-main-title em { font-size: inherit; }
+
+      /* Resume/CV */
+      .resume-cv-card { padding: 26px 22px; }
+      .resume-cv-title { font-size: 1.15rem; }
+      .resume-cv-actions .btn { flex: 1; justify-content: center; font-size: 0.82rem; padding: 11px 14px; }
+
+      /* Contact */
+      .contact-grid { gap: 32px; margin-top: 36px; }
+      .contact-item { padding: 16px; gap: 12px; }
+      .contact-item-value { font-size: 0.85rem; word-break: break-word; }
+      .contact-form { padding: 24px 20px; gap: 16px; }
+      .btn { font-size: 0.85rem; padding: 12px 20px; }
+
+      /* Footer */
+      footer { padding: 30px 6% 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+      /* Admin modals — fit small screens */
+      .admin-modal-box { padding: 32px 24px; max-width: 92vw; }
+      .edit-modal-box { padding: 26px 20px; max-width: 94vw; }
+      .edit-modal-close { top: 10px; right: 10px; padding: 4px 10px; font-size: 0.72rem; }
+
+      #scroll-top { width: 40px; height: 40px; bottom: 20px; right: 20px; font-size: 1rem; }
+      #admin-toggle-btn { bottom: 70px; right: 20px; width: 40px; height: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 48px 5%; }
+      .hero-name { font-size: clamp(2rem, 12vw, 2.8rem); }
+      .hero-img-wrap { width: 180px; height: 230px; }
+      .about-stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .about-stat-card { padding: 18px 14px; }
+      .about-stat-num { font-size: 1.8rem; }
+      .about-stat-label { font-size: 0.7rem; }
+      .carousel-track .project-card,
+      .admin-add-card.proj-size { min-width: 230px; max-width: 230px; }
+      .toolkit-grid .toolkit-card { min-width: 220px; max-width: 220px; }
+      .cert-card { min-width: 220px; max-width: 220px; }
+      .form-row { gap: 12px; }
+      .contact-form { padding: 20px 16px; }
+      .hero-tech-float { flex-direction: row; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+    }
+
+    /* Prevent horizontal scroll bugs from wide fixed-width elements on phones */
+    @media (max-width: 400px) {
+      .hero-img-wrap { width: 160px; height: 210px; }
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+
   </style>
 </head>
 
@@ -3387,33 +3584,62 @@ filter: none;
       newPrev.addEventListener('click', function() { var idx = getActiveIndex(); if (idx > 0) scrollToCard(idx-1); });
       newNext.addEventListener('click', function() { var idx = getActiveIndex(); if (idx < cards.length-1) scrollToCard(idx+1); });
 
-      /* Mouse drag */
+      /* Mouse drag — with momentum/inertia on release (PC feel) */
       var isDragging = false, dragStartX = 0, scrollStart = 0, dragCommitted = false;
+      var velocity = 0, lastX = 0, lastT = 0, rafId = null;
+
       track.addEventListener('mousedown', function(e) {
         if (e.target.closest('a') || e.target.closest('button')) return;
         isDragging = true; dragCommitted = false;
         dragStartX = e.clientX; scrollStart = track.scrollLeft;
+        lastX = e.clientX; lastT = performance.now(); velocity = 0;
+        cancelAnimationFrame(rafId);
       });
       window.addEventListener('mousemove', function(e) {
         if (!isDragging) return;
         var delta = e.clientX - dragStartX;
-        if (!dragCommitted && Math.abs(delta) > 6) { dragCommitted = true; track.classList.add(dragCls); }
-        if (dragCommitted) track.scrollLeft = scrollStart - delta;
+        if (!dragCommitted && Math.abs(delta) > 6) { dragCommitted = true; track.classList.add(dragCls); track.style.scrollBehavior = 'auto'; }
+        if (dragCommitted) {
+          track.scrollLeft = scrollStart - delta;
+          var now = performance.now();
+          var dt  = now - lastT;
+          if (dt > 0) velocity = (e.clientX - lastX) / dt;
+          lastX = e.clientX; lastT = now;
+        }
       });
       function endDrag() {
         if (!isDragging) return;
         isDragging = false;
-        if (dragCommitted) { track.classList.remove(dragCls); snapToNearest(); }
+        if (dragCommitted) {
+          track.classList.remove(dragCls);
+          applyMomentum();
+        }
         dragCommitted = false;
       }
       window.addEventListener('mouseup', endDrag);
       window.addEventListener('mouseleave', endDrag);
 
-      /* Touch swipe */
-      var touchStartX = 0, touchScrollStart = 0;
-      track.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; touchScrollStart = track.scrollLeft; }, { passive: true });
-      track.addEventListener('touchmove',  function(e) { track.scrollLeft = touchScrollStart + (touchStartX - e.touches[0].clientX); }, { passive: true });
-      track.addEventListener('touchend',   function() { snapToNearest(); }, { passive: true });
+      function applyMomentum() {
+        var v = velocity * 16; /* px per frame estimate */
+        function step() {
+          if (Math.abs(v) < 0.5) { snapToNearest(); return; }
+          track.scrollLeft -= v;
+          v *= 0.94; /* friction */
+          rafId = requestAnimationFrame(step);
+        }
+        if (Math.abs(velocity) > 0.05) { rafId = requestAnimationFrame(step); }
+        else { snapToNearest(); }
+      }
+
+      /* Touch swipe — let the browser handle native momentum scrolling.
+         We do NOT hijack scrollLeft on touchmove; that fights native
+         inertia and is what made mobile scrolling feel stiff/rough. */
+      track.addEventListener('touchstart', function() {
+        track.style.scrollBehavior = 'auto';
+      }, { passive: true });
+      track.addEventListener('touchend', function() {
+        setTimeout(snapToNearest, 80);
+      }, { passive: true });
 
       function snapToNearest() {
         var idx = getActiveIndex();
