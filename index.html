@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1090,6 +1090,7 @@ filter: none;
       position: relative;
       overflow: hidden;
       cursor: default;
+      max-height: 560px;
     }
     .project-card::before {
       content: '';
@@ -1113,7 +1114,98 @@ filter: none;
       border: 1px solid rgba(245,158,11,0.2);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.4rem;
+      position: relative;
+      flex-shrink: 0;
     }
+    body.admin-mode .project-icon { cursor: pointer; }
+    body.admin-mode .project-icon::after {
+      content: '+ img';
+      position: absolute;
+      bottom: -8px; right: -8px;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+
+    /* Project image box — FIXED height, edge-to-edge (borderless).
+       Negative margins pull it out to the card's own padding edges so
+       there is no gap between the image and the card border. Only the
+       top corners are rounded to match the card's rounded top. */
+    .project-img-wrap {
+      width: calc(100% + 64px);
+      margin: -32px -32px 0 -32px;
+      height: 195px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      overflow: hidden;
+      background: var(--bg-3);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+    }
+    /* Orange gradient line — .project-card::before gets covered by this
+       image box (which sits flush at the card's top edge), so redraw the
+       same line here, on top of the image itself. */
+    .project-img-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 3;
+    }
+    .project-card:hover .project-img-wrap::before { transform: scaleX(1); }
+    .project-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-img-wrap img { transform: scale(1.05); }
+    .project-img-edit-btn {
+      position: absolute;
+      bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      z-index: 2;
+    }
+    body.admin-mode .project-img-edit-btn { display: block; }
+
+    /* Icon + tag pill side by side — saves vertical space instead of
+       stacking the icon above the tag on its own row. Project number
+       badge sits at the end of the same row, so it stays visible even
+       when the card has an image (the old giant background number gets
+       covered by the image once one is added). */
+    .project-header-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .project-num-badge {
+      margin-left: auto;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
     .project-tag {
       display: inline-block;
       font-size: 0.7rem; font-weight: 600;
@@ -1129,7 +1221,13 @@ filter: none;
     .project-desc {
       font-size: 0.9rem; color: var(--text-2);
       line-height: 1.7; font-weight: 300; flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      padding-right: 4px;
     }
+    .project-desc::-webkit-scrollbar { width: 5px; }
+    .project-desc::-webkit-scrollbar-track { background: transparent; }
+    .project-desc::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 10px; }
     .project-stack { display: flex; flex-wrap: wrap; gap: 7px; }
     .stack-pill {
       font-size: 0.72rem; font-weight: 500;
@@ -1788,6 +1886,7 @@ filter: none;
       position: relative;
       overflow: hidden;
       cursor: default;
+      max-height: 560px;
     }
     .project-card::after {
       content: '';
@@ -1894,6 +1993,19 @@ filter: none;
       background: #fff;
       flex-shrink: 0;
     }
+    /* Orange gradient line — matches .project-img-wrap::before. Drawn on the
+       image wrap (not .cert-card::before) because the image sits flush at
+       the card's top edge and would otherwise cover a line on the card. */
+    .cert-img-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 3;
+    }
+    .cert-card:hover .cert-img-wrap::before { transform: scaleX(1); }
     .cert-img-wrap::after {
       content: '';
       position: absolute;
@@ -2532,6 +2644,7 @@ filter: none;
       .project-title { font-size: 1.05rem; }
       .project-desc { font-size: 0.85rem; }
       .project-num { font-size: 2.6rem; }
+      .project-img-wrap { height: 130px; width: calc(100% + 40px); margin: -24px -20px 0 -20px; }
       .carousel-track, .toolkit-grid, #certs-track { padding: 12px 16px 24px 16px; gap: 16px; }
       .carousel-controls { gap: 12px; }
       .carousel-btn { width: 38px; height: 38px; font-size: 1rem; }
@@ -2579,6 +2692,7 @@ filter: none;
       .about-stat-label { font-size: 0.7rem; }
       .carousel-track .project-card,
       .admin-add-card.proj-size { min-width: 230px; max-width: 230px; }
+      .project-img-wrap { height: 110px; width: calc(100% + 40px); margin: -24px -20px 0 -20px; }
       .toolkit-grid .toolkit-card { min-width: 220px; max-width: 220px; }
       .cert-card { min-width: 220px; max-width: 220px; }
       .form-row { gap: 12px; }
@@ -2636,6 +2750,15 @@ filter: none;
         <div class="admin-form-group"><label>Description</label><textarea id="ef-desc" placeholder="What does it do?"></textarea></div>
         <div class="admin-form-group"><label>Tech Stack (comma separated)</label><input id="ef-stack" placeholder="Python, Flask, SQLite"/></div>
         <div class="admin-form-group"><label>GitHub / Live Link</label><input id="ef-link" placeholder="https://github.com/..."/></div>
+        <div class="admin-form-group">
+          <label>Project Image (optional)</label>
+          <div class="img-drop-zone" id="ef-drop" onclick="document.getElementById('ef-file').click()">
+            <div class="drop-icon">🖼️</div>
+            <p>Click or drag to upload project image</p>
+          </div>
+          <img class="img-preview" id="ef-preview"/>
+          <input type="file" id="ef-file" accept="image/*" style="display:none" onchange="previewImg(this,'ef-preview')"/>
+        </div>
       </div>
 
       <!-- Cert fields -->
@@ -2890,9 +3013,16 @@ filter: none;
 
         <div class="project-card reveal" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">01</span>
-          <div class="project-icon">💸</div>
-          <span class="project-tag">Python · CLI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">💸</div>
+
+            <span class="project-tag">Python · CLI</span>
+
+            <span class="project-num-badge">#01</span>
+
+          </div>
           <h3 class="project-title">Expense Tracker</h3>
           <p class="project-desc">A Python command-line app to log daily expenses, categorize them, and generate monthly summaries saved to CSV. Built for real-world use.</p>
           <div class="project-stack">
@@ -2905,9 +3035,16 @@ filter: none;
 
         <div class="project-card reveal delay-1" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">02</span>
-          <div class="project-icon">☁️</div>
-          <span class="project-tag">Python · CLI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">☁️</div>
+
+            <span class="project-tag">Python · CLI</span>
+
+            <span class="project-num-badge">#02</span>
+
+          </div>
           <h3 class="project-title">Weather App</h3>
           <p class="project-desc">A real-time CLI weather application built with Python using the OpenWeatherMap API. Displays temperature, humidity, wind speed, and visibility in a formatted terminal card.</p>
           <div class="project-stack">
@@ -2920,9 +3057,16 @@ filter: none;
 
         <div class="project-card reveal delay-2" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">03</span>
-          <div class="project-icon">📥</div>
-          <span class="project-tag">Python · GUI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">📥</div>
+
+            <span class="project-tag">Python · GUI</span>
+
+            <span class="project-num-badge">#03</span>
+
+          </div>
           <h3 class="project-title">YouTube Downloader</h3>
           <p class="project-desc">A Tkinter desktop app powered by yt-dlp. Download YouTube videos in MP4 or extract MP3 audio, with a real-time progress bar and clean dark UI.</p>
           <div class="project-stack">
@@ -2936,9 +3080,16 @@ filter: none;
 
         <div class="project-card reveal delay-3" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">04</span>
-          <div class="project-icon">⏲️</div>
-          <span class="project-tag">Python · GUI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">⏲️</div>
+
+            <span class="project-tag">Python · GUI</span>
+
+            <span class="project-num-badge">#04</span>
+
+          </div>
           <h3 class="project-title">Pomodoro Timer</h3>
           <p class="project-desc">A sleek dark-themed Pomodoro Timer built with Python and Tkinter, featuring 25/5 work-break cycles, real-time countdown, pause/resume, auto-switching sessions, customizable timers, session tracking and sound alerts.</p>
           <div class="project-stack">
@@ -2950,9 +3101,16 @@ filter: none;
 
         <div class="project-card reveal delay-3" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">05</span>
-          <div class="project-icon">🐸</div>
-          <span class="project-tag">Python · CLI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">🐸</div>
+
+            <span class="project-tag">Python · CLI</span>
+
+            <span class="project-num-badge">#05</span>
+
+          </div>
           <h3 class="project-title">Eat That Frog</h3>
           <p class="project-desc">Eat That Frog is a command-line task manager built in Python, based on Brian Tracy's productivity principle — tackle your hardest, highest-value task first before anything else.</p>
           <div class="project-stack">
@@ -2964,9 +3122,16 @@ filter: none;
 
         <div class="project-card reveal delay-3" style="position:relative">
           <button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>
-          <span class="project-num">06</span>
-          <div class="project-icon">⏰</div>
-          <span class="project-tag">Python · CLI · GUI</span>
+                    <div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>
+          <div class="project-header-row">
+
+            <div class="project-icon" onclick="editProjectImage(this)">⏰</div>
+
+            <span class="project-tag">Python · CLI · GUI</span>
+
+            <span class="project-num-badge">#06</span>
+
+          </div>
           <h3 class="project-title">Alarm Clock</h3>
           <p class="project-desc">A command-line and GUI-based alarm clock built in Python. Supports multiple alarms, snooze, real-time clock display, input validation, and cross-platform sound — using only the Python standard library.</p>
           <div class="project-stack">
@@ -3323,7 +3488,7 @@ filter: none;
     var htmlEl     = document.documentElement;
     var toggleBtn  = document.getElementById('theme-toggle');
     var themeLabel = document.getElementById('theme-label');
-    var savedTheme = localStorage.getItem('theme') || 'dark';
+    var savedTheme = localStorage.getItem('theme') || 'light';
     htmlEl.setAttribute('data-theme', savedTheme);
     themeLabel.textContent = savedTheme === 'dark' ? 'Dark' : 'Light';
     toggleBtn.addEventListener('click', function() {
@@ -3721,6 +3886,7 @@ filter: none;
     var editModalType = null;
     var cfImageData = null;
     var cfImageFile = null;   /* raw File object for Storage upload */
+    var editingCard  = null; /* set when editing an existing project card, else null = adding new */
     var authBusy = false;
 
     /* ── TOAST ── */
@@ -3873,9 +4039,12 @@ filter: none;
         textData[el.dataset.key] = el.innerHTML;
       });
 
-      /* 2. Projects */
+      /* 2. Projects — text only in meta_v1; images each get their own doc
+         (same 1MB-per-doc fix pattern used for certificates below) */
       var projects = [];
-      document.querySelectorAll('#carousel-track .project-card').forEach(function(card) {
+      var projImgPromises = [];
+      var projCardCount = document.querySelectorAll('#carousel-track .project-card').length;
+      document.querySelectorAll('#carousel-track .project-card').forEach(function(card, pidx) {
         var titleEl = card.querySelector('.project-title');
         var descEl  = card.querySelector('.project-desc');
         var iconEl  = card.querySelector('.project-icon');
@@ -3890,7 +4059,32 @@ filter: none;
           stack:  Array.from(pills).map(function(p) { return p.textContent; }).join(', '),
           link:   linkEl  ? linkEl.href          : ''
         });
+        var wrap  = card.querySelector('.project-img-wrap');
+        var imgEl = wrap && wrap.style.display !== 'none' ? wrap.querySelector('img') : null;
+        if (imgEl && imgEl.src && imgEl.src.startsWith('data:')) {
+          var pSizeBytes = Math.ceil(imgEl.src.length * 0.75);
+          if (pSizeBytes > 950000) {
+            console.error('Project image #' + pidx + ' too large:', pSizeBytes, 'bytes');
+            adminToast('⚠ Project ' + (pidx+1) + ' image too large — compress and re-upload');
+          } else {
+            projImgPromises.push(
+              window._db.collection('portfolio').doc('proj_img_' + pidx).set({ imgUrl: imgEl.src })
+                .catch(function(err) {
+                  console.error('proj_img_' + pidx + ' write FAILED:', err.code, err.message);
+                  adminToast('⚠ Project ' + (pidx+1) + ' image save failed: ' + err.code);
+                  throw err;
+                })
+            );
+          }
+        }
       });
+      /* Clean up orphan proj_img_N docs beyond current count */
+      var projCleanupPromises = [];
+      for (var pi = projCardCount; pi < projCardCount + 10; pi++) {
+        projCleanupPromises.push(
+          window._db.collection('portfolio').doc('proj_img_' + pi).delete().catch(function() {})
+        );
+      }
 
       /* 3. Certificates — text only in meta_v1; images each get their own doc */
       var certs = [];
@@ -3961,7 +4155,7 @@ filter: none;
         chips:      chips
       }, { merge: true });
 
-      Promise.all([p1, p2].concat(certImgPromises).concat(cleanupPromises))
+      Promise.all([p1, p2].concat(certImgPromises).concat(cleanupPromises).concat(projImgPromises).concat(projCleanupPromises))
         .then(function() { adminToast('Changes saved to Firebase ✓'); })
         .catch(function(err) {
           console.error('Firestore save error:', err.code, err.message, err);
@@ -4041,9 +4235,12 @@ filter: none;
             card.style.position = 'relative';
             card.innerHTML =
               '<button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>' +
-              '<span class="project-num">' + numStr + '</span>' +
-              '<div class="project-icon">' + (p.icon || '🚀') + '</div>' +
-              '<span class="project-tag">' + (p.tag || 'Project') + '</span>' +
+              '<div class="project-img-wrap" style="display:none"><img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button></div>' +
+              '<div class="project-header-row">' +
+                '<div class="project-icon" onclick="editProjectImage(this)">' + (p.icon || '🚀') + '</div>' +
+                '<span class="project-tag">' + (p.tag || 'Project') + '</span>' +
+                '<span class="project-num-badge">#' + numStr + '</span>' +
+              '</div>' +
               '<h3 class="project-title">' + p.title + '</h3>' +
               (p.desc ? '<p class="project-desc">' + p.desc + '</p>' : '') +
               (stackHTML ? '<div class="project-stack">' + stackHTML + '</div>' : '') +
@@ -4051,6 +4248,18 @@ filter: none;
             if (addCard) track.insertBefore(card, addCard);
             else if (track) track.appendChild(card);
             if (window._revealObserver) window._revealObserver.observe(card);
+            /* Fetch this project's image from its own Firestore doc (avoids 1MB doc-size limit) */
+            (function(cardEl, projIdx) {
+              window._db.collection('portfolio').doc('proj_img_' + projIdx).get()
+                .then(function(imgSnap) {
+                  if (imgSnap.exists && imgSnap.data().imgUrl) {
+                    var wrap = cardEl.querySelector('.project-img-wrap');
+                    var img  = wrap ? wrap.querySelector('img') : null;
+                    if (wrap && img) { img.src = imgSnap.data().imgUrl; wrap.style.display = ''; }
+                  }
+                })
+                .catch(function() {});
+            })(card, idx);
           });
         }
 
@@ -4181,8 +4390,8 @@ filter: none;
     };
 
     function renumberProjects() {
-      var nums = document.querySelectorAll('#carousel-track .project-num');
-      nums.forEach(function(n, i) { n.textContent = String(i + 1).padStart(2, '0'); });
+      var nums = document.querySelectorAll('#carousel-track .project-num-badge');
+      nums.forEach(function(n, i) { n.textContent = '#' + String(i + 1).padStart(2, '0'); });
     }
 
     /* ── CERT / IMAGE PREVIEW HELPER ──
@@ -4230,6 +4439,76 @@ filter: none;
       reader.readAsDataURL(file);
     };
 
+    /* ── SHARED IMAGE COMPRESSION HELPER ──
+       Same logic as previewImg above, factored out so project images use
+       the exact same safe-size guarantee (fixes 1MB Firestore doc limit). */
+    function compressImageFile(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var img = new Image();
+        img.onload = function() {
+          var MAX_DIM = 1400;
+          var w = img.width, h = img.height;
+          if (w > MAX_DIM || h > MAX_DIM) {
+            if (w > h) { h = Math.round(h * (MAX_DIM / w)); w = MAX_DIM; }
+            else       { w = Math.round(w * (MAX_DIM / h)); h = MAX_DIM; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+          var quality = 0.85;
+          var dataUrl = canvas.toDataURL('image/jpeg', quality);
+          while (dataUrl.length > 700000 && quality > 0.35) {
+            quality -= 0.1;
+            dataUrl = canvas.toDataURL('image/jpeg', quality);
+          }
+          if (dataUrl.length > 950000) {
+            adminToast('⚠ Image still too large after compression — pick a smaller photo');
+            return;
+          }
+          callback(dataUrl);
+        };
+        img.onerror = function() { adminToast('⚠ Could not read image file'); };
+        img.src = ev.target.result;
+      };
+      reader.onerror = function() { adminToast('⚠ Could not read image file'); };
+      reader.readAsDataURL(file);
+    }
+
+    /* ── PROJECT IMAGE: ADD or EDIT directly on the card ──
+       Click the project icon (no image yet) or the "Edit" button on an
+       existing project image to pick a new photo. Saves immediately —
+       no need to open the full Add/Edit Project modal just for a photo. */
+    window.editProjectImage = function(el) {
+      if (!adminMode) return;
+      var card = el.closest('.project-card');
+      if (!card) return;
+
+      var pickerInput = document.createElement('input');
+      pickerInput.type = 'file';
+      pickerInput.accept = 'image/*';
+      pickerInput.style.display = 'none';
+      document.body.appendChild(pickerInput);
+
+      pickerInput.onchange = function() {
+        var file = pickerInput.files[0];
+        pickerInput.remove();
+        if (!file) return;
+        compressImageFile(file, function(dataUrl) {
+          var wrap = card.querySelector('.project-img-wrap');
+          var img  = wrap ? wrap.querySelector('img') : null;
+          if (wrap && img) {
+            img.src = dataUrl;
+            wrap.style.display = '';
+          }
+          adminToast('💾 Saving project image…');
+          savePortfolioState();
+        });
+      };
+      pickerInput.click();
+    };
+
     /* ── ADD/EDIT MODAL ── */
     window.openEditModal = function(type) {
       if (!adminMode) { adminToggle(); return; }
@@ -4246,6 +4525,9 @@ filter: none;
         var el = document.getElementById(id); if(el) el.value = '';
       });
       document.getElementById('cf-preview').style.display = 'none';
+      document.getElementById('ef-preview').style.display = 'none';
+      var cfFileEl = document.getElementById('cf-file'); if (cfFileEl) cfFileEl.value = '';
+      var efFileEl = document.getElementById('ef-file'); if (efFileEl) efFileEl.value = '';
       document.getElementById('edit-modal').classList.add('open');
     };
     window.closeEditModal = function() {
@@ -4280,18 +4562,27 @@ filter: none;
         ? '<a href="' + link + '" target="_blank" class="btn btn-ghost">View Project →</a>'
         : '<button class="btn btn-ghost" onclick="cardClick(event)">View Project →</button>';
 
+      var imgHTML = cfImageData
+        ? '<img src="' + cfImageData + '"/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button>'
+        : '<img/><button class="project-img-edit-btn" onclick="event.stopPropagation();editProjectImage(this)">🖼️ Edit</button>';
+
       var card = document.createElement('div');
       card.className = 'project-card';
       card.style.position = 'relative';
       card.innerHTML =
         '<button class="admin-delete-btn" onclick="deleteProjectCard(this)">🗑 Delete</button>' +
-        '<span class="project-num">' + numStr + '</span>' +
-        '<div class="project-icon">' + icon + '</div>' +
-        '<span class="project-tag">' + tag + '</span>' +
+        '<div class="project-img-wrap"' + (cfImageData ? '' : ' style="display:none"') + '>' + imgHTML + '</div>' +
+        '<div class="project-header-row">' +
+          '<div class="project-icon" onclick="editProjectImage(this)">' + icon + '</div>' +
+          '<span class="project-tag">' + tag + '</span>' +
+          '<span class="project-num-badge">#' + numStr + '</span>' +
+        '</div>' +
         '<h3 class="project-title">' + title + '</h3>' +
         (desc ? '<p class="project-desc">' + desc + '</p>' : '') +
         (stackHTML ? '<div class="project-stack">' + stackHTML + '</div>' : '') +
         linkHTML;
+
+      if (cfImageData) card.querySelector('.project-img-wrap img').src = cfImageData;
 
       track.insertBefore(card, addCard);
       closeEditModal();
@@ -4537,6 +4828,17 @@ document.querySelectorAll('.cert-img-wrap').forEach(function(wrap) {
     var img = wrap.querySelector('img');
     if (img) openLightbox(img.src);
   });
+});
+
+/* Attach click to project image wraps — same popup style as certificates.
+   Delegated on the container so it also works for projects added later
+   (via Add Project modal or loaded from Firebase), not just the 6 that
+   exist in the page's raw HTML. */
+document.getElementById('carousel-track').addEventListener('click', function(e) {
+  var wrap = e.target.closest('.project-img-wrap');
+  if (!wrap || wrap.style.display === 'none') return;
+  var img = wrap.querySelector('img');
+  if (img && img.src) openLightbox(img.src);
 });
 
 /* Expose globally for dynamically added cards */
