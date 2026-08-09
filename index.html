@@ -3895,6 +3895,7 @@ filter: none;
       /* 3. Certificates — text only in meta_v1; images each get their own doc */
       var certs = [];
       var certImgPromises = [];
+      var certCardCount = document.querySelectorAll('#certs-track .cert-card').length;
       document.querySelectorAll('#certs-track .cert-card').forEach(function(card, idx) {
         var titleEl  = card.querySelector('.cert-title');
         var dateEl   = card.querySelector('.cert-date-row');
@@ -3908,11 +3909,31 @@ filter: none;
           link:   linkEl   ? linkEl.href                 : '#'
         });
         if (imgEl && imgEl.src && imgEl.src.startsWith('data:')) {
-          certImgPromises.push(
-            window._db.collection('portfolio').doc('cert_img_' + idx).set({ imgUrl: imgEl.src })
-          );
+          var sizeBytes = Math.ceil(imgEl.src.length * 0.75); /* approx decoded size */
+          if (sizeBytes > 950000) {
+            console.error('Cert image #' + idx + ' too large for one Firestore doc:', sizeBytes, 'bytes');
+            adminToast('⚠ Certificate ' + (idx+1) + ' image too large — compress and re-upload');
+          } else {
+            certImgPromises.push(
+              window._db.collection('portfolio').doc('cert_img_' + idx).set({ imgUrl: imgEl.src })
+                .catch(function(err) {
+                  console.error('cert_img_' + idx + ' write FAILED:', err.code, err.message);
+                  adminToast('⚠ Cert ' + (idx+1) + ' image save failed: ' + err.code);
+                  throw err;
+                })
+            );
+          }
         }
       });
+      /* Clean up orphan cert_img_N docs beyond current count, so deleted
+         certificates don't leave stale images behind that get picked up
+         by a future card landing on the same index. */
+      var cleanupPromises = [];
+      for (var ci = certCardCount; ci < certCardCount + 10; ci++) {
+        cleanupPromises.push(
+          window._db.collection('portfolio').doc('cert_img_' + ci).delete().catch(function() {})
+        );
+      }
 
       /* 4. Skills — save each category card's pill HTML */
       var skillCards = [];
@@ -3940,11 +3961,11 @@ filter: none;
         chips:      chips
       }, { merge: true });
 
-      Promise.all([p1, p2].concat(certImgPromises))
+      Promise.all([p1, p2].concat(certImgPromises).concat(cleanupPromises))
         .then(function() { adminToast('Changes saved to Firebase ✓'); })
         .catch(function(err) {
-          console.error('Firestore save error:', err);
-          adminToast('⚠ Save failed — check Firestore rules');
+          console.error('Firestore save error:', err.code, err.message, err);
+          adminToast('⚠ Save failed: ' + (err.code || err.message || 'unknown error'));
         });
     };
 
@@ -4164,16 +4185,48 @@ filter: none;
       nums.forEach(function(n, i) { n.textContent = String(i + 1).padStart(2, '0'); });
     }
 
-    /* ── CERT / IMAGE PREVIEW HELPER ── */
+    /* ── CERT / IMAGE PREVIEW HELPER ──
+       Compresses/resizes the image via canvas before storing it as base64.
+       This keeps every cert image well under Firestore's 1MB-per-document
+       limit, no matter how large the original phone-camera photo is. */
     window.previewImg = function(input, previewId) {
       var file = input.files[0]; if (!file) return;
-      cfImageFile = file;   /* store raw File for Firebase Storage */
+      cfImageFile = file;
       var reader = new FileReader();
       reader.onload = function(ev) {
-        cfImageData = ev.target.result;
-        var prev = document.getElementById(previewId);
-        prev.src = ev.target.result; prev.style.display = 'block';
+        var img = new Image();
+        img.onload = function() {
+          var MAX_DIM = 1400; /* max width or height in px */
+          var w = img.width, h = img.height;
+          if (w > MAX_DIM || h > MAX_DIM) {
+            if (w > h) { h = Math.round(h * (MAX_DIM / w)); w = MAX_DIM; }
+            else       { w = Math.round(w * (MAX_DIM / h)); h = MAX_DIM; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+          /* Try JPEG at decreasing quality until under ~700KB base64 */
+          var quality = 0.85;
+          var dataUrl = canvas.toDataURL('image/jpeg', quality);
+          while (dataUrl.length > 700000 && quality > 0.35) {
+            quality -= 0.1;
+            dataUrl = canvas.toDataURL('image/jpeg', quality);
+          }
+
+          if (dataUrl.length > 950000) {
+            adminToast('⚠ Image still too large after compression — pick a smaller photo');
+          }
+
+          cfImageData = dataUrl;
+          var prev = document.getElementById(previewId);
+          prev.src = dataUrl; prev.style.display = 'block';
+          console.log('Cert image compressed: ~' + Math.round(dataUrl.length/1024) + 'KB, ' + w + 'x' + h + ', quality ' + quality.toFixed(2));
+        };
+        img.onerror = function() { adminToast('⚠ Could not read image file'); };
+        img.src = ev.target.result;
       };
+      reader.onerror = function() { adminToast('⚠ Could not read image file'); };
       reader.readAsDataURL(file);
     };
 
