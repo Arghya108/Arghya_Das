@@ -31,20 +31,14 @@ LINK: https://arghya108.github.io/Arghya_Das/
 
 ## 🚀 Goals of This Portfolio
 
-- Showcase real-world projects
+- Showcase projects
 - Demonstrate frontend development skills
 - Build a strong professional presence
 
-## 📌 Future Improvements
-
-- Blog/technical writing section
-- Performance optimization
-- Advanced animations
-- System design case studies
 
 ## 👨‍💻 About Me
 
-I am passionate about building real things — from Python tools to a full website. Obsessed with AI, automation, and building something that actually works. 
+A person who knows little but is curious a lot. My fields of interest include AI, Machine Learning, Data Science, Data Analytics, smartphones, future technologies, automation, neuroscience, philosophy, human psychology, and business.
 
 ⭐ If you like this project, feel free to star the repository.
 
