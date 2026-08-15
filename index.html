@@ -3961,20 +3961,31 @@ filter: none;
           btn.textContent = 'Unlock ✓'; btn.disabled = false;
         });
     };
-    document.getElementById('admin-pw-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') adminCheckPw();
-    });
-
     function exitAdmin() {
       /* Save WHILE still authenticated — Firestore rules require a signed-in
-         user to write, so this must happen before signOut(), not after. */
-      savePortfolioState();
+         user to write, so this must fully COMPLETE before signOut(), not just
+         start before it. savePortfolioState() now returns its Promise chain,
+         so we wait for it here to avoid in-flight writes being rejected the
+         instant the auth token is invalidated by signOut(). */
+      adminToast('💾 Saving changes to Firebase…');
+      savePortfolioState().then(finishExitAdmin).catch(finishExitAdmin);
+    }
+
+    function finishExitAdmin() {
       adminMode = false;
       document.body.classList.remove('admin-mode');
       disableEditing();
-      adminToast('Edit mode OFF — saving to Firebase…');
       if (window._auth) window._auth.signOut();
     }
+
+    /* Re-sync all three carousels (dots / prev-next boundaries) after a card
+       is added or removed at runtime, without needing a full page reload. */
+    function reinitAllCarousels() {
+      if (window._initCarousel && window._carouselCfgs) {
+        window._carouselCfgs.forEach(function(cfg) { window._initCarousel(cfg); });
+      }
+    }
+    window._reinitAllCarousels = reinitAllCarousels;
 
     /* ── INLINE TEXT EDITING ── */
     function enableEditing() {
@@ -4155,7 +4166,10 @@ filter: none;
         chips:      chips
       }, { merge: true });
 
-      Promise.all([p1, p2].concat(certImgPromises).concat(cleanupPromises).concat(projImgPromises).concat(projCleanupPromises))
+      /* Return the chain so callers (like exitAdmin) can wait for the save
+         to fully finish before doing anything that depends on it, such as
+         signing out. */
+      return Promise.all([p1, p2].concat(certImgPromises).concat(cleanupPromises).concat(projImgPromises).concat(projCleanupPromises))
         .then(function() { adminToast('Changes saved to Firebase ✓'); })
         .catch(function(err) {
           console.error('Firestore save error:', err.code, err.message, err);
@@ -4276,7 +4290,7 @@ filter: none;
             card.className = 'cert-card';
             card.style.position = 'relative';
             card.innerHTML =
-              '<button class="admin-delete-btn" onclick="this.closest(\'.' + 'cert-card\').remove();savePortfolioState();adminToast(\'Certificate deleted\')">&#128465;</button>' +
+              '<button class="admin-delete-btn" onclick="this.closest(\'.' + 'cert-card\').remove();window._reinitAllCarousels&&window._reinitAllCarousels();savePortfolioState();adminToast(\'Certificate deleted\')">&#128465;</button>' +
               '<div class="cert-img-wrap">' + placeholderHTML + '</div>' +
               '<div class="cert-info">' +
                 '<div class="cert-tag-row"><span class="cert-badge-pill">Certificate</span></div>' +
@@ -4354,6 +4368,7 @@ filter: none;
       if (!confirm('Delete this project?')) return;
       btn.closest('.project-card').remove();
       renumberProjects();
+      reinitAllCarousels();
       adminToast('Project deleted');
       savePortfolioState();
     };
@@ -4585,6 +4600,8 @@ filter: none;
       if (cfImageData) card.querySelector('.project-img-wrap img').src = cfImageData;
 
       track.insertBefore(card, addCard);
+      if (window._revealObserver) window._revealObserver.observe(card);
+      reinitAllCarousels();
       closeEditModal();
       adminToast('Project added ✓');
       savePortfolioState();
@@ -4597,7 +4614,7 @@ filter: none;
       card.className = 'cert-card';
       card.style.position = 'relative';
       card.innerHTML =
-        '<button class="admin-delete-btn" onclick="this.closest(\'.cert-card\').remove();savePortfolioState();adminToast(\'Certificate deleted\')">🗑</button>' +
+        '<button class="admin-delete-btn" onclick="this.closest(\'.cert-card\').remove();window._reinitAllCarousels&&window._reinitAllCarousels();savePortfolioState();adminToast(\'Certificate deleted\')">🗑</button>' +
         '<div class="cert-img-wrap">' + imgHTML + '</div>' +
         '<div class="cert-info">' +
           '<div class="cert-tag-row">' +
@@ -4636,6 +4653,8 @@ filter: none;
           if (img && window.openLightbox) window.openLightbox(img.src);
         });
       })(card.querySelector('.cert-img-wrap'));
+      if (window._revealObserver) window._revealObserver.observe(card);
+      reinitAllCarousels();
       closeEditModal();
       adminToast('Certificate added ✓');
       savePortfolioState();
