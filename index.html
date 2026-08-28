@@ -5171,7 +5171,7 @@
         var title = document.getElementById('cf-title').value.trim();
         if (!title) { alert('Title is required.'); return; }
         var issuer = document.getElementById('cf-issuer').value.trim() || 'Google Cloud';
-        var date = document.getElementById('cf-year').value.trim().replace(/^📅\s*/, '') || '2024';
+        var date = document.getElementById('cf-year').value.trim().replace(/^\s*/, '') || '2024';
         var link = document.getElementById('cf-link').value.trim() || '#';
         var track = document.getElementById('certs-track');
         var addCard = track.querySelector('.admin-add-card');
@@ -5189,7 +5189,7 @@
           '<span class="cert-badge-pill">Verified Credential</span>' +
           '<h3 class="cert-title">' + title + '</h3>' +
           '<div class="cert-issuer">Issued by ' + issuer + '</div>' +
-          '<div class="cert-date-row">📅 ' + date + '</div>' +
+          '<div class="cert-date-row"> ' + date + '</div>' +
           '<a href="' + link + '" target="_blank" class="cert-view-btn">Verify Credential →</a>' +
           '</div>';
 
