@@ -1,4 +1,5 @@
-<img width="1896" height="876" alt="image" src="https://github.com/user-attachments/assets/dfe9ece6-4875-4700-bacb-220db1ccb060" />
+
+<img width="1893" height="871" alt="image" src="https://github.com/user-attachments/assets/1b5bdc6f-f647-43fc-8f44-0cd0e2d7d85c" />
 
 
 
@@ -42,16 +43,15 @@ A person who knows little but is curious a lot. My fields of interest include AI
 
 HOME PAGE: 🦉 DARK MODE
 
-<img width="1896" height="876" alt="image" src="https://github.com/user-attachments/assets/ef6d320e-80c8-4748-9c4a-587f3e4b1eb1" />
 
-
+<img width="1893" height="871" alt="image" src="https://github.com/user-attachments/assets/fef1a3a5-532e-4562-8cfc-7d89536655dc" />
 
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
 HOME PAGE: 🌞 LIGHT MODE
 
-<img width="1900" height="875" alt="image" src="https://github.com/user-attachments/assets/b3322fb6-0ce3-460b-b2cc-0b8d2c4fefa7" />
+<img width="1900" height="871" alt="image" src="https://github.com/user-attachments/assets/bebacb77-e4d5-48f3-b000-70e521138e39" />
 
 
 
