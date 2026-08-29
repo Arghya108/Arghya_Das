@@ -923,6 +923,49 @@
       background-clip: text;
     }
 
+    /* Rocket accent — decorative, scoped only to the hero name, sits to the
+       left of "Arghya" the way it does in the reference design. */
+    .hero-name-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-rocket-accent {
+      position: absolute;
+      left: -54px;
+      top: -6px;
+      width: 40px;
+      height: 40px;
+      color: var(--g-blue);
+      transform: rotate(-8deg);
+      animation: fadeUp 0.8s ease 0.05s both, rocketFloat 3.2s ease-in-out 0.9s infinite;
+      pointer-events: none;
+    }
+
+    .hero-rocket-accent svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @keyframes rocketFloat {
+
+      0%,
+      100% {
+        transform: rotate(-8deg) translateY(0);
+      }
+
+      50% {
+        transform: rotate(-8deg) translateY(-6px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-rocket-accent {
+        display: none;
+      }
+    }
+
     .hero-tagline {
       font-family: var(--font-mono);
       font-size: clamp(1rem, 2vw, 1.25rem);
@@ -931,8 +974,44 @@
       margin-bottom: 16px;
       min-height: 2em;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-tagline-row {
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero-tagline {
+        align-items: center;
+      }
+    }
+
+    /* Underline swoosh beneath the tagline, matching the reference image */
+    .hero-tagline-swoosh {
+      width: 132px;
+      height: 14px;
+      margin-top: 4px;
+      overflow: visible;
+    }
+
+    .hero-tagline-swoosh path {
+      fill: none;
+      stroke: var(--g-blue);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation: swooshDraw 0.9s ease 0.9s forwards;
+    }
+
+    @keyframes swooshDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
 
     .typing-cursor {
@@ -3080,11 +3159,18 @@
       text-align: center;
       cursor: pointer;
       background: var(--bg);
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
     }
 
-    .img-drop-zone:hover {
+    .img-drop-zone:hover,
+    .img-drop-zone.drag-active {
       border-color: var(--g-blue);
       background: var(--accent-glow);
+    }
+
+    .img-drop-zone.drag-active {
+      transform: scale(1.015);
+      border-style: solid;
     }
 
     .drop-icon {
@@ -3643,12 +3729,27 @@
         </div>
 
         <h1 class="hero-name">
-          <span class="line-1">Arghya</span><br>
+          <span class="hero-name-wrap">
+            <span class="hero-rocket-accent" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2c2.5 1.8 4 4.9 4 8.2 0 1.6-.35 3.1-1 4.4l-3-1.1-3 1.1c-.65-1.3-1-2.8-1-4.4C8 6.9 9.5 3.8 12 2z"
+                  stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <circle cx="12" cy="9" r="1.6" stroke="currentColor" stroke-width="1.5" />
+                <path d="M8.5 14.5 6 17M15.5 14.5 18 17M9 18l-1.5 3M15 18l1.5 3" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </span>
+            <span class="line-1">Arghya</span>
+          </span><br>
           <span class="line-2">Das</span>
         </h1>
 
         <p class="hero-tagline">
-          <span id="typing-text"></span><span class="typing-cursor"></span>
+          <span class="hero-tagline-row"><span id="typing-text"></span><span class="typing-cursor"></span></span>
+          <svg class="hero-tagline-swoosh" viewBox="0 0 132 14" aria-hidden="true">
+            <path d="M2 3 C 40 13, 92 13, 130 3" />
+          </svg>
         </p>
 
         <p class="hero-desc" data-editable contenteditable="false" data-key="hero-desc">
@@ -3667,7 +3768,7 @@
             <div class="code-editor-tab">student.py</div>
             <div class="code-editor-status">● Active</div>
           </div>
-          <div class="code-editor-body">
+          <div class="code-editor-body" data-editable contenteditable="false" data-key="code-widget-body">
             <div class="code-line"><span class="code-num">01</span><span><span class="kw">class</span> <span
                   class="cls">Student</span>:</span></div>
             <div class="code-line"><span class="code-num">02</span><span> name = <span class="str">"Arghya
@@ -4382,7 +4483,15 @@
     const EMAILJS_PUBLIC_KEY = 'nRDQadgca8tHGiSQc';
     const EMAILJS_SERVICE_ID = 'service_4xsxule';
     const EMAILJS_TEMPLATE_ID = 'template_bsoca63';
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+    /* Guarded: if the EmailJS CDN script is blocked, slow, or fails to load,
+       this must not throw — otherwise every script below it in this same
+       block (typing animation, cursor, carousels, scroll reveal, command
+       palette) would silently stop executing. */
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    } else {
+      console.warn('EmailJS SDK failed to load — contact form will show a friendly error on submit.');
+    }
 
     /* ══════════════════════════════════════════════════════
        1. CUSTOM CURSOR
@@ -4514,6 +4623,13 @@
       if (!valid) return;
       submitBtn.textContent = 'Transmitting message…';
       submitBtn.disabled = true;
+      if (typeof emailjs === 'undefined') {
+        console.warn('EmailJS SDK unavailable — cannot send message.');
+        failMsg.classList.add('show');
+        submitBtn.textContent = 'Try Again'; submitBtn.style.background = 'var(--g-red)'; submitBtn.disabled = false;
+        setTimeout(function () { failMsg.classList.remove('show'); submitBtn.textContent = 'Send Message →'; submitBtn.style.background = ''; }, 4000);
+        return;
+      }
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         from_name: document.getElementById('name').value.trim(),
         from_email: document.getElementById('email').value.trim(),
@@ -5170,9 +5286,15 @@
 
       /* Compresses/resizes the image via canvas before storing it as base64,
          so it stays well under Firestore's 1MB-per-document limit. */
-      window.previewImg = function (input, previewId) {
-        var file = input.files ? input.files[0] : null;
+      /* Shared by file-picker (onchange) and drag-and-drop paths so both
+         go through identical validation + compression, avoiding drift
+         between the two upload entry points. */
+      window.processImageFile = function (file, previewId) {
         if (!file) return;
+        if (!file.type || file.type.indexOf('image/') !== 0) {
+          adminToast('⚠ Please drop an image file');
+          return;
+        }
         cfImageFile = file;
         var reader = new FileReader();
         reader.onload = function (ev) {
@@ -5207,6 +5329,59 @@
         reader.onerror = function () { adminToast('⚠ Could not read image file'); };
         reader.readAsDataURL(file);
       };
+
+      window.previewImg = function (input, previewId) {
+        var file = input.files ? input.files[0] : null;
+        window.processImageFile(file, previewId);
+      };
+
+      /* Enables actual drag-and-drop onto an .img-drop-zone element.
+         zoneId = the drop zone's DOM id, fileInputId = its paired hidden
+         <input type=file>, previewId = the <img> preview to populate. */
+      function wireDropZone(zoneId, fileInputId, previewId) {
+        var zone = document.getElementById(zoneId);
+        if (!zone) return;
+        var dragCounter = 0;
+        zone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        zone.addEventListener('dragenter', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragCounter++;
+          zone.classList.add('drag-active');
+        });
+        zone.addEventListener('dragleave', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragCounter = Math.max(0, dragCounter - 1);
+          if (dragCounter === 0) zone.classList.remove('drag-active');
+        });
+        zone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragCounter = 0;
+          zone.classList.remove('drag-active');
+          var dt = e.dataTransfer;
+          var file = dt && dt.files && dt.files[0] ? dt.files[0] : null;
+          if (!file) return;
+          /* Keep the hidden file input in sync too, so a subsequent
+             click-to-browse or form reset behaves consistently. */
+          try {
+            var input = document.getElementById(fileInputId);
+            if (input && window.DataTransfer) {
+              var transfer = new DataTransfer();
+              transfer.items.add(file);
+              input.files = transfer.files;
+            }
+          } catch (err) { /* DataTransfer construction unsupported — safe to ignore */ }
+          window.processImageFile(file, previewId);
+        });
+      }
+      window._wireDropZone = wireDropZone;
+      wireDropZone('ef-drop', 'ef-file', 'ef-preview');
+      wireDropZone('cf-drop', 'cf-file', 'cf-preview');
 
       /* Shared compression helper — same guarantee, used by editProjectImage
          for direct-on-card uploads (no full modal needed). */
